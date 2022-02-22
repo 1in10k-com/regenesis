@@ -92,6 +92,8 @@ pub mod constants;
 use constants::{currency::*, time::*};
 use sp_runtime::generic::Era;
 
+pub mod claims;
+
 /// Generated voter bag information.
 mod voter_bags;
 
@@ -1357,6 +1359,16 @@ impl pallet_transaction_storage::Config for Runtime {
 	type WeightInfo = pallet_transaction_storage::weights::SubstrateWeight<Runtime>;
 }
 
+parameter_types! {
+	pub Prefix: &'static [u8] = b"Claim Regenesis DAO airdrop for public key: ";
+}
+
+impl claims::Config for Runtime {
+	type Event = Event;
+	type Currency = Balances;
+	type Prefix = Prefix;
+}
+
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
@@ -1411,6 +1423,7 @@ construct_runtime!(
 		ChildBounties: pallet_child_bounties,
 		Referenda: pallet_referenda,
 		ConvictionVoting: pallet_conviction_voting,
+		Claims: claims,
 	}
 );
 
